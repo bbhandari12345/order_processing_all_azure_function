@@ -43,6 +43,7 @@ class VendorInvoiceSchema(Schema):
     ship_date = fields.Date(allow_none=True)
     deliveries = fields.Raw(allow_none=True, description='Raw')
     invoice_status = fields.Str(allow_none=True, description='String')
+    invoice_status_raw = fields.Str(allow_none=True, description='String')
     tran_id = fields.Str(allow_none=True, description='String')
     tran_date = fields.Date(allow_none=True)
     ship_cost = fields.Float(allow_none=True, description='Int')
@@ -60,18 +61,12 @@ class VendorInvoiceSchema(Schema):
             Using the method field to return the required data
         """
 
-        if "ship_date" in item and isinstance(item['ship_date'], str):
-            item['ship_date'] = pd.to_datetime(item['ship_date']).date()
-        elif "tran_date" in item and isinstance(item['tran_date'], str):
-            item['tran_date'] = pd.to_datetime(item['tran_date']).date()
-        else:
-            pass
-
         for fld in self._declared_fields:
             if fld in (
                 'memo',
                 'ship_date',
                 'invoice_status',
+                'invoice_status_raw',
                 'tran_id',
                 'tran_date',
                 'ship_cost',
@@ -93,6 +88,11 @@ class VendorInvoiceSchema(Schema):
                     item[fld] = None
                 else:
                     pass
+
+        if "ship_date" in item and isinstance(item['ship_date'], str):
+            item['ship_date'] = pd.to_datetime(item['ship_date']).date().isoformat()
+        if "tran_date" in item and isinstance(item['tran_date'], str):
+            item['tran_date'] = pd.to_datetime(item['tran_date']).date().isoformat()
 
         if 'deliveries' in item and not item['deliveries']:
             item['deliveries'] = None
