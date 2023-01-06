@@ -1,0 +1,3 @@
+from op_netsuite_fetcher.base_class.base_fetcher import BaseFetcher, BaseNetsuiteFetcher
+from op_netsuite_fetcher.base_class.base_extractor import BaseExtractor
+from op_netsuite_fetcher.base_class.base_dispatcher import BaseDispatcher

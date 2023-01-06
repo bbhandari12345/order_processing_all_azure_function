@@ -1,0 +1,20 @@
+ENVIRONMENT = "Preprod"
+CONFIG_FILE_TYPE = "blob"
+BLOB_URL = "https://savapi.blob.core.windows.net/stage"
+BLOB_CONTAINER_NAME = "stage"
+BLOB_NAME = "order-processing"
+#CONFIG_DIRECTORY = "config_files/"
+CONFIG_DIRECTORY = "https://savapi.blob.core.windows.net/stage/order-processing/"
+VENDOR_CONFIG_PATH = "vendor_configs/"
+NETSUITE_CONFIG_PATH = "netsuite_config/netsuite.json"
+FETCHER_WRITE_PATH = "outdir/fetcher_data"
+EXTRACTOR_WRITE_PATH = "outdir/extractor_data"
+
+
+[DB_CONFIG]
+host = "localhost"
+port = "5432"
+user = "postgres"
+password = "root"
+dbname = "op"
+application_name = "test"
