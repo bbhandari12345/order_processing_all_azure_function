@@ -1,6 +1,7 @@
 from op_fetcher.constants import CONFIG, ConfigFields, BLOB_CONTAINER_NAME, BLOB_NAME
 from op_fetcher.common.helpers import connect_blob
 from op_fetcher.conf import get_logger
+import azure.functions as func
 from abc import ABC, abstractmethod
 from typing import Any
 import requests
@@ -42,6 +43,7 @@ class Base(ABC):
                     else:
                         self.config_template = None
                         self.logger.info(f"Azure blob file does not found: {self.kwargs.get('config_file_path')}")
+                        return func.HttpResponse("config in blob is not found", status_code=404)
             elif CONFIG.get(ConfigFields.CONFIG_FILE_TYPE.value) == 'local':
                 self.logger.info("Using config files from local directory")
                 with open(
