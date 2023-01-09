@@ -35,7 +35,13 @@ class Base(ABC):
                 with requests.get(
                     self.kwargs.get('config_file_path')
                 ) as config_file:
-                    self.config_template = json.loads(config_file.text)
+                    if config_file.status_code in range(200, 210):
+                        self.config_template = json.loads(config_file.text)
+                        self.logger.info(
+                            f"Azure blob file found for the vendor: {self.kwargs.get('config_file_path')}")
+                    else:
+                        self.config_template = None
+                        self.logger.info(f"Azure blob file does not found: {self.kwargs.get('config_file_path')}")
             elif CONFIG.get(ConfigFields.CONFIG_FILE_TYPE.value) == 'local':
                 self.logger.info("Using config files from local directory")
                 with open(
