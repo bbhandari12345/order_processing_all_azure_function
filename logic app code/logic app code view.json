@@ -1,0 +1,508 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each_2": {
+                "actions": {
+                    "Condition_to_check_empty_net_of_object": {
+                        "actions": {
+                            "Append_to_extractor_output": {
+                                "inputs": {
+                                    "name": "extractor_output",
+                                    "value": "@items('For_each_2')"
+                                },
+                                "runAfter": {},
+                                "type": "AppendToArrayVariable"
+                            },
+                            "Append_to_extractor_summary": {
+                                "inputs": {
+                                    "name": "extractor_summary",
+                                    "value": {
+                                        "conclusion": "not extracted",
+                                        "message": "fetcher result is empty",
+                                        "requested_item": "@items('For_each_2')",
+                                        "status": 500
+                                    }
+                                },
+                                "runAfter": {
+                                    "Append_to_extractor_output": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "type": "AppendToArrayVariable"
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Append_to__extractor_output_failure": {
+                                    "inputs": {
+                                        "name": "extractor_output",
+                                        "value": "@body('op_extractor')"
+                                    },
+                                    "runAfter": {
+                                        "op_extractor": [
+                                            "Failed"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "Append_to__extractor_output_success": {
+                                    "inputs": {
+                                        "name": "extractor_output",
+                                        "value": "@body('op_extractor')"
+                                    },
+                                    "runAfter": {
+                                        "op_extractor": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "Append_to_array_variable_10": {
+                                    "inputs": {
+                                        "name": "extractor_summary",
+                                        "value": {
+                                            "conclusion": "extracted",
+                                            "message": "fetcher result is not empty",
+                                            "requested_item": "@items('For_each_2')",
+                                            "response_body": "@body('op_extractor')",
+                                            "response_code": "@outputs('op_extractor')['statusCode']",
+                                            "response_header": "@outputs('op_extractor')['headers']",
+                                            "status": 200
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Append_to__extractor_output_success": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "Append_to_array_variable_11": {
+                                    "inputs": {
+                                        "name": "extractor_summary",
+                                        "value": {
+                                            "conclusion": "not extracted",
+                                            "message": "fetcher result is not empty",
+                                            "requested_item": "@items('For_each_2')",
+                                            "response_body": "@body('op_extractor')",
+                                            "response_code": "@outputs('op_extractor')['statusCode']",
+                                            "response_header": "@outputs('op_extractor')['headers']",
+                                            "status": 500
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Append_to__extractor_output_failure": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "op_extractor": {
+                                    "inputs": {
+                                        "body": "@items('For_each_2')",
+                                        "function": {
+                                            "id": "/subscriptions/1ce78759-24c6-47f3-b11e-f1ea12273337/resourceGroups/VendorAPIResourceGroup/providers/Microsoft.Web/sites/fn-orderprocessing-dev/functions/op_extractor"
+                                        },
+                                        "method": "POST"
+                                    },
+                                    "runAfter": {},
+                                    "type": "Function"
+                                }
+                            }
+                        },
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@length(items('For_each_2'))",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        "runAfter": {},
+                        "type": "If"
+                    }
+                },
+                "foreach": "@variables('fetcher_output')",
+                "runAfter": {
+                    "Initialize_variable_for_extractor_summary": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "For_each_3": {
+                "actions": {
+                    "Condition_to_check_empty_ness_of_item": {
+                        "actions": {
+                            "Append_to_dispatcher_summary_for_empty": {
+                                "inputs": {
+                                    "name": "dispatcher_summary",
+                                    "value": {
+                                        "conclusion": "not dispatched",
+                                        "message": "extractor result is empty",
+                                        "requested_item": "@items('For_each_3')",
+                                        "status": 500
+                                    }
+                                },
+                                "runAfter": {},
+                                "type": "AppendToArrayVariable"
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Append_to_dispatcher_summary_for_non_empty_for_unsucess": {
+                                    "inputs": {
+                                        "name": "dispatcher_summary",
+                                        "value": {
+                                            "conclusion": "not dispatched",
+                                            "message": "fetcher result is not empty",
+                                            "requested_item": "@items('For_each_3')",
+                                            "response_body": "@body('op_dispatcher')",
+                                            "response_code": "@outputs('op_dispatcher')['statusCode']",
+                                            "response_header": "@outputs('op_dispatcher')['headers']",
+                                            "status": 500
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "op_dispatcher": [
+                                            "Failed"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "Append_to_dispatcher_summary_for_non_empty_success": {
+                                    "inputs": {
+                                        "name": "dispatcher_summary",
+                                        "value": {
+                                            "conclusion": "diapatched",
+                                            "message": "extractor result is not empty",
+                                            "requested_item": "@items('For_each_3')",
+                                            "response_body": "@body('op_dispatcher')",
+                                            "response_code": "@outputs('op_dispatcher')['statusCode']",
+                                            "response_header": "@outputs('op_dispatcher')['headers']",
+                                            "status": 200
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "op_dispatcher": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "AppendToArrayVariable"
+                                },
+                                "op_dispatcher": {
+                                    "inputs": {
+                                        "body": "@items('For_each_3')",
+                                        "function": {
+                                            "id": "/subscriptions/1ce78759-24c6-47f3-b11e-f1ea12273337/resourceGroups/VendorAPIResourceGroup/providers/Microsoft.Web/sites/fn-orderprocessing-dev/functions/op_dispatcher"
+                                        },
+                                        "method": "POST"
+                                    },
+                                    "runAfter": {},
+                                    "type": "Function"
+                                }
+                            }
+                        },
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@length(items('For_each_3'))",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        "runAfter": {},
+                        "type": "If"
+                    }
+                },
+                "foreach": "@variables('extractor_output')",
+                "runAfter": {
+                    "Initialize_variable_for_dispatcher_summary": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "Initialize_variable_for_dispatcher_input": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "extractor_output",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "fetching_the_data_for_all_vendor_at_the_same_time": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_for_dispatcher_summary": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "dispatcher_summary",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "For_each_2": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_for_extractor_summary": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "extractor_summary",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_for_dispatcher_input": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "fetcher_output_array_initialization": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "fetcher_output",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "scheduled_json": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "fetcher_output_summary_array_initialization": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "fetcher_summary",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "fetcher_output_array_initialization": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "fetching_the_data_for_all_vendor_at_the_same_time": {
+                "actions": {
+                    "append__fetcher_success_response_body_for_extractor_input": {
+                        "inputs": {
+                            "name": "fetcher_output",
+                            "value": "@body('op_fetcher')"
+                        },
+                        "runAfter": {
+                            "appending_the_compose_for_summary_success": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "AppendToArrayVariable"
+                    },
+                    "append__fetcher_unsuccess_response_body_for_extractor_input": {
+                        "inputs": {
+                            "name": "fetcher_output",
+                            "value": "@body('op_fetcher')"
+                        },
+                        "runAfter": {
+                            "appending_the_compose_for_summary_unsuccess": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "AppendToArrayVariable"
+                    },
+                    "appending_the_compose_for_summary_success": {
+                        "inputs": {
+                            "name": "fetcher_summary",
+                            "value": "@outputs('composing_the_summary_for_successful_fetch')"
+                        },
+                        "runAfter": {
+                            "composing_the_summary_for_successful_fetch": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "AppendToArrayVariable"
+                    },
+                    "appending_the_compose_for_summary_unsuccess": {
+                        "inputs": {
+                            "name": "fetcher_summary",
+                            "value": "@outputs('composing_the_summary_for_unsuccessful_fetch')"
+                        },
+                        "runAfter": {
+                            "composing_the_summary_for_unsuccessful_fetch": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "AppendToArrayVariable"
+                    },
+                    "composing_the_summary_for_successful_fetch": {
+                        "inputs": {
+                            "message": "successful",
+                            "requested_items": "@items('fetching_the_data_for_all_vendor_at_the_same_time')",
+                            "result_body": "@body('op_fetcher')",
+                            "result_header": "@outputs('op_fetcher')['headers']",
+                            "result_status": "@outputs('op_fetcher')['statusCode']"
+                        },
+                        "runAfter": {
+                            "op_fetcher": [
+                                "Failed",
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "Compose"
+                    },
+                    "composing_the_summary_for_unsuccessful_fetch": {
+                        "inputs": {
+                            "message": "unsuccessful",
+                            "requested_items": "@items('fetching_the_data_for_all_vendor_at_the_same_time')",
+                            "result_body": "@body('op_fetcher')",
+                            "result_header": "@outputs('op_fetcher')['headers']",
+                            "result_status": "@outputs('op_fetcher')['statusCode']"
+                        },
+                        "runAfter": {
+                            "op_fetcher": [
+                                "Failed"
+                            ]
+                        },
+                        "type": "Compose"
+                    },
+                    "op_fetcher": {
+                        "inputs": {
+                            "body": "@items('fetching_the_data_for_all_vendor_at_the_same_time')",
+                            "function": {
+                                "id": "/subscriptions/1ce78759-24c6-47f3-b11e-f1ea12273337/resourceGroups/VendorAPIResourceGroup/providers/Microsoft.Web/sites/fn-orderprocessing-dev/functions/op_fetcher"
+                            },
+                            "method": "POST"
+                        },
+                        "runAfter": {},
+                        "type": "Function"
+                    }
+                },
+                "foreach": "@outputs('scheduled_json')",
+                "runAfter": {
+                    "fetcher_output_summary_array_initialization": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "netsuitefetchersummary": {
+                "inputs": {
+                    "result_body": "@body('op_netsuite_fetcher_component')",
+                    "result_header": "@outputs('op_netsuite_fetcher_component')['headers']",
+                    "result_status": "@outputs('op_netsuite_fetcher_component')['statusCode']"
+                },
+                "runAfter": {
+                    "op_netsuite_fetcher_component": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "op_netsuite_fetcher_component": {
+                "inputs": {
+                    "function": {
+                        "id": "/subscriptions/1ce78759-24c6-47f3-b11e-f1ea12273337/resourceGroups/VendorAPIResourceGroup/providers/Microsoft.Web/sites/fn-orderprocessing-dev/functions/op_netsuite_fetcher"
+                    },
+                    "method": "GET"
+                },
+                "runAfter": {},
+                "type": "Function"
+            },
+            "op_schedular_component": {
+                "inputs": {
+                    "function": {
+                        "id": "/subscriptions/1ce78759-24c6-47f3-b11e-f1ea12273337/resourceGroups/VendorAPIResourceGroup/providers/Microsoft.Web/sites/fn-orderprocessing-dev/functions/op_schedular"
+                    },
+                    "method": "GET"
+                },
+                "runAfter": {
+                    "netsuitefetchersummary": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Function"
+            },
+            "op_summary": {
+                "inputs": {
+                    "netsuite_fetcher": "@outputs('netsuitefetchersummary')",
+                    "op_dispatcher": "@variables('dispatcher_summary')",
+                    "op_extractor": "@variables('extractor_summary')",
+                    "op_fetcher": "@variables('fetcher_summary')",
+                    "op_schedular": "@outputs('opschedularsummary')"
+                },
+                "runAfter": {
+                    "For_each_3": [
+                        "Succeeded",
+                        "Failed"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "opschedularsummary": {
+                "inputs": {
+                    "result_body": "@body('op_schedular_component')",
+                    "result_header": "@outputs('op_schedular_component')['headers']",
+                    "result_status": "@outputs('op_schedular_component')['statusCode']"
+                },
+                "runAfter": {
+                    "op_schedular_component": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "scheduled_json": {
+                "inputs": "@json(body('op_schedular_component'))",
+                "runAfter": {
+                    "opschedularsummary": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Compose"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {},
+        "triggers": {
+            "timer_to_trigger": {
+                "evaluatedRecurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "recurrence": {
+                    "frequency": "Day",
+                    "interval": 1
+                },
+                "type": "Recurrence"
+            }
+        }
+    },
+    "parameters": {}
+}
