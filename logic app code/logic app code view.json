@@ -21,7 +21,7 @@
                             "name": "extractor_summary",
                             "value": {
                                 "conclusion": "not extracted",
-                                "requested_item": "@items('For_each_2')",
+                                "requested_item": "@json(items('For_each_2'))",
                                 "response_body": "@body('op_extractor')",
                                 "response_code": "@outputs('op_extractor')['statusCode']",
                                 "response_header": "@outputs('op_extractor')['headers']",
@@ -40,7 +40,7 @@
                             "name": "extractor_summary",
                             "value": {
                                 "conclusion": "extracted",
-                                "requested_item": "@items('For_each_2')",
+                                "requested_item": "@json(items('For_each_2'))",
                                 "response_body": "@json(body('op_extractor'))",
                                 "response_code": "@outputs('op_extractor')['statusCode']",
                                 "response_header": "@outputs('op_extractor')['headers']",
@@ -81,7 +81,7 @@
                             "name": "dispatcher_summary",
                             "value": {
                                 "conclusion": "diapatched",
-                                "requested_item": "@items('For_each_3')",
+                                "requested_item": "@json(items('For_each_3'))",
                                 "response_body": "@body('op_dispatcher')",
                                 "response_code": "@outputs('op_dispatcher')['statusCode']",
                                 "response_header": "@outputs('op_dispatcher')['headers']",
@@ -100,7 +100,7 @@
                             "name": "dispatcher_summary",
                             "value": {
                                 "conclusion": "not dispatched",
-                                "requested_item": "@items('For_each_3')",
+                                "requested_item": "@json(items('For_each_3'))",
                                 "response_body": "@body('op_dispatcher')",
                                 "response_code": "@outputs('op_dispatcher')['statusCode']",
                                 "response_header": "@outputs('op_dispatcher')['headers']",
