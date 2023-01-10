@@ -21,7 +21,7 @@
                             "name": "extractor_summary",
                             "value": {
                                 "conclusion": "not extracted",
-                                "requested_item": "@json(items('For_each_2'))",
+                                "requested_item": "@items('For_each_2')",
                                 "response_body": "@body('op_extractor')",
                                 "response_code": "@outputs('op_extractor')['statusCode']",
                                 "response_header": "@outputs('op_extractor')['headers']",
@@ -40,7 +40,7 @@
                             "name": "extractor_summary",
                             "value": {
                                 "conclusion": "extracted",
-                                "requested_item": "@json(items('For_each_2'))",
+                                "requested_item": "@items('For_each_2')",
                                 "response_body": "@json(body('op_extractor'))",
                                 "response_code": "@outputs('op_extractor')['statusCode']",
                                 "response_header": "@outputs('op_extractor')['headers']",
@@ -81,7 +81,7 @@
                             "name": "dispatcher_summary",
                             "value": {
                                 "conclusion": "diapatched",
-                                "requested_item": "@json(items('For_each_3'))",
+                                "requested_item": "@items('For_each_3')",
                                 "response_body": "@json(body('op_dispatcher'))",
                                 "response_code": "@outputs('op_dispatcher')['statusCode']",
                                 "response_header": "@outputs('op_dispatcher')['headers']",
@@ -100,7 +100,7 @@
                             "name": "dispatcher_summary",
                             "value": {
                                 "conclusion": "not dispatched",
-                                "requested_item": "@json(items('For_each_3'))",
+                                "requested_item": "@items('For_each_3')",
                                 "response_body": "@body('op_dispatcher')",
                                 "response_code": "@outputs('op_dispatcher')['statusCode']",
                                 "response_header": "@outputs('op_dispatcher')['headers']",
@@ -235,7 +235,7 @@
                             "name": "fetcher_summary",
                             "value": {
                                 "message": "successful",
-                                "requested_items": "@json(items('fetching_the_data_for_all_vendor_at_the_same_time'))",
+                                "requested_items": "@items('fetching_the_data_for_all_vendor_at_the_same_time')",
                                 "result_body": "@json(body('op_fetcher'))",
                                 "result_header": "@outputs('op_fetcher')['headers']",
                                 "result_status": "@outputs('op_fetcher')['statusCode']"
@@ -253,7 +253,7 @@
                             "name": "fetcher_summary",
                             "value": {
                                 "message": "unsuccessful",
-                                "requested_items": "@json(items('fetching_the_data_for_all_vendor_at_the_same_time'))",
+                                "requested_items": "@items('fetching_the_data_for_all_vendor_at_the_same_time')",
                                 "result_body": "@body('op_fetcher')",
                                 "result_header": "@outputs('op_fetcher')['headers']",
                                 "result_status": "@outputs('op_fetcher')['statusCode']"
@@ -370,12 +370,12 @@
         "triggers": {
             "timer_to_trigger": {
                 "evaluatedRecurrence": {
-                    "frequency": "Day",
-                    "interval": 1
+                    "frequency": "Minute",
+                    "interval": 10
                 },
                 "recurrence": {
-                    "frequency": "Day",
-                    "interval": 1
+                    "frequency": "Minute",
+                    "interval": 10
                 },
                 "type": "Recurrence"
             }
