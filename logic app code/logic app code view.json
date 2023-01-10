@@ -82,7 +82,7 @@
                             "value": {
                                 "conclusion": "diapatched",
                                 "requested_item": "@items('For_each_3')",
-                                "response_body": "@json(body('op_dispatcher'))",
+                                "response_body": "@body('op_dispatcher')",
                                 "response_code": "@outputs('op_dispatcher')['statusCode']",
                                 "response_header": "@outputs('op_dispatcher')['headers']",
                                 "status": 200
